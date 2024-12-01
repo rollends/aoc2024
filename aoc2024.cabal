@@ -1,0 +1,69 @@
+cabal-version:       2.2
+
+name:                aoc2024
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/RollenDS/aoc2024#readme
+license:             BSD-3-Clause
+license-file:        LICENSE
+author:              Rollen S. D'Souza
+maintainer:          rollensdsouza@gmail.com
+copyright:           2024 Rollen S. D'Souza
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+                     CHANGELOG.md
+
+
+library aoc2024-support
+  hs-source-dirs:       src
+  exposed-modules:      AOC2024.Support.Lexer
+  default-language:     Haskell2010
+  build-depends:        base >= 4.7 && < 5
+  ghc-options:          -Wall
+                        -Wcompat
+                        -Widentities
+                        -Wincomplete-record-updates
+                        -Wincomplete-uni-patterns
+                        -Wmissing-export-lists
+                        -Wmissing-home-modules
+                        -Wpartial-fields
+                        -Wredundant-constraints
+
+executable aoc2024-tests
+  hs-source-dirs:       test
+  main-is:              TestSupport.hs
+  default-language:     Haskell2010
+  build-depends:        base >= 4.7 && < 5,
+                        HUnit,
+                        aoc2024-support
+  ghc-options:          -Wall
+                        -Wcompat
+                        -Widentities
+                        -Wincomplete-record-updates
+                        -Wincomplete-uni-patterns
+                        -Wmissing-export-lists
+                        -Wmissing-home-modules
+                        -Wpartial-fields
+                        -Wredundant-constraints
+
+executable aoc2024-day1
+  hs-source-dirs:       day1
+  main-is:              Day1.hs
+  default-language:     Haskell2010
+  build-depends:        base >= 4.7 && < 5,
+                        HUnit,
+                        optparse-applicative,
+                        optparse-simple,
+                        containers,
+                        aoc2024-support
+  ghc-options:          -Wall
+                        -Wcompat
+                        -Widentities
+                        -Wincomplete-record-updates
+                        -Wincomplete-uni-patterns
+                        -Wmissing-export-lists
+                        -Wmissing-home-modules
+                        -Wpartial-fields
+                        -Wredundant-constraints

@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorTheme": "Monokai",
+		"workbench.iconTheme": "vs-seti",
+		"workbench.preferredDarkColorTheme": "Monokai"
+	}
+}
