@@ -1,7 +1,6 @@
 module AOC2024.Support.Lexer (lexFile, lexString, Token (..)) where
 
 import Data.Char
-import Data.List
 import GHC.IO.Encoding.UTF8 (utf8)
 import GHC.IO.Handle
 
@@ -28,7 +27,6 @@ data LexerState = LexerState [Token] (Maybe Token)
 
 initialLexerState :: LexerState
 popToken :: LexerState -> LexerState
-mapToken :: LexerState -> (Token -> Token) -> LexerState
 pushToken :: LexerState -> Token -> LexerState
 completeLex :: LexerState -> [Token]
 lexStringFoldOperation :: Maybe Char -> LexerState -> Char -> LexerState
@@ -45,8 +43,6 @@ initialLexerState = LexerState [] Nothing
 popToken (LexerState v Nothing) = LexerState v Nothing
 popToken (LexerState v (Just t)) = LexerState (v ++ [t]) Nothing
 
-mapToken (LexerState v m) op = LexerState v (fmap op m)
-
 pushToken state token =
   let LexerState v _ = popToken state
    in LexerState v $ Just token
@@ -54,13 +50,13 @@ pushToken state token =
 completeLex (LexerState v (Just a)) = completeLex $ popToken $ (LexerState v (Just a))
 completeLex (LexerState v Nothing) = v
 
-lexStringIdentifyToken _ state c Space =
+lexStringIdentifyToken _ state _ Space =
   case state of
     LexerState v (Just (Whitespace a)) -> LexerState v $ Just $ Whitespace $ a + 1
     _ -> pushToken state $ Whitespace 1
-lexStringIdentifyToken _ state c Control =
+lexStringIdentifyToken _ state _ Control =
   case state of
-    LexerState v (Just Newline) -> state
+    LexerState _ (Just Newline) -> state
     _ -> pushToken state $ Newline
 lexStringIdentifyToken Nothing state c _ =
   case state of
@@ -69,7 +65,7 @@ lexStringIdentifyToken Nothing state c _ =
 lexStringIdentifyToken (Just delim) state c typ =
   case (c == delim, state) of
     (True, LexerState v (Just Delimiter)) -> LexerState v $ Just Delimiter
-    (True, LexerState v _) -> pushToken state $ Delimiter
+    (True, LexerState _ _) -> pushToken state $ Delimiter
     (False, _) -> lexStringIdentifyToken Nothing state c typ
 
 lexStringFoldOperation delim state c = lexStringIdentifyToken delim state c $ generalCategory c
