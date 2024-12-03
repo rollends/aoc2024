@@ -67,3 +67,23 @@ executable aoc2024-day1
                         -Wmissing-home-modules
                         -Wpartial-fields
                         -Wredundant-constraints
+
+executable aoc2024-day2
+  hs-source-dirs:       day2
+  main-is:              Day2.hs
+  default-language:     Haskell2010
+  build-depends:        base >= 4.7 && < 5,
+                        HUnit,
+                        optparse-applicative,
+                        optparse-simple,
+                        containers,
+                        aoc2024-support
+  ghc-options:          -Wall
+                        -Wcompat
+                        -Widentities
+                        -Wincomplete-record-updates
+                        -Wincomplete-uni-patterns
+                        -Wmissing-export-lists
+                        -Wmissing-home-modules
+                        -Wpartial-fields
+                        -Wredundant-constraints
