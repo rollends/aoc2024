@@ -40,8 +40,8 @@ testDelimiter :: Test
 testDelimiter =
   TestCase $
     assertEqual "Delimiter"
-    [Lexer.Delimiter, Lexer.Word "d", Lexer.Delimiter]
-    (lexString (Just 'c') "ccdc")
+    [Lexer.Delimiter 'c', Lexer.Word "d", Lexer.Delimiter 'c']
+    (lexString (Just "c") "ccdc")
 
 testBasicLexing :: Test
 testBasicLexing = 
@@ -71,11 +71,11 @@ testCSVExample =
   TestCase $
     assertEqual "Small CSV"
     [
-      Lexer.Word "3", Lexer.Delimiter, Lexer.Word "4", Lexer.Newline,
-      Lexer.Word "4", Lexer.Delimiter, Lexer.Whitespace 2, Lexer.Word "3", Lexer.Newline,
-      Lexer.Word "2", Lexer.Whitespace 2, Lexer.Delimiter, Lexer.Whitespace 1, Lexer.Word "5", Lexer.Newline
+      Lexer.Word "3", Lexer.Delimiter ',', Lexer.Word "4", Lexer.Newline,
+      Lexer.Word "4", Lexer.Delimiter ',', Lexer.Whitespace 2, Lexer.Word "3", Lexer.Newline,
+      Lexer.Word "2", Lexer.Whitespace 2, Lexer.Delimiter ',', Lexer.Whitespace 1, Lexer.Word "5", Lexer.Newline
     ]
-    (lexString (Just ',') "3,4\n4,  3\n2  , 5\n")
+    (lexString (Just ",") "3,4\n4,  3\n2  , 5\n")
 
 testSimpleExamples :: Test
 testSimpleExamples = TestList [testSmallExample, testCSVExample]

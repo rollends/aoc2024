@@ -145,7 +145,7 @@ increment a = a + 1
 
 parseGridIntoExistingGrid [] grid _ = grid
 parseGridIntoExistingGrid (Lexer.Newline : rest) grid lineNumber = parseGridIntoExistingGrid rest grid (lineNumber + 1)
-parseGridIntoExistingGrid (Lexer.Delimiter : rest) grid lineNumber = parseGridIntoExistingGrid rest grid lineNumber
+parseGridIntoExistingGrid ((Lexer.Delimiter _) : rest) grid lineNumber = parseGridIntoExistingGrid rest grid lineNumber
 parseGridIntoExistingGrid ((Lexer.Whitespace _) : rest) grid lineNumber = parseGridIntoExistingGrid rest grid lineNumber
 parseGridIntoExistingGrid ((Lexer.Word string) : rest) grid lineNumber =
   let characterWithIndex = zip3 string (repeat lineNumber) (iterate increment 1)

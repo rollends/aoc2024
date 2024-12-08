@@ -8,18 +8,18 @@ data Token
   = Whitespace Int
   | Newline
   | Word String
-  | Delimiter
+  | Delimiter Char
 
 instance Eq Token where
   (==) (Whitespace a) (Whitespace b) = (a == b)
   (==) (Word a) (Word b) = (a == b)
   (==) Newline Newline = True
-  (==) Delimiter Delimiter = True
+  (==) (Delimiter c) (Delimiter d) = c == d
   (==) _ _ = False
 
 instance Show Token where
   showsPrec _ (Whitespace _) = showString " WS "
-  showsPrec _ Delimiter = showString " SEP "
+  showsPrec _ (Delimiter c) = showString $ " SEP '" ++ [c] ++ "' "
   showsPrec _ (Word a) = showString $ " '" ++ a ++ "' "
   showsPrec _ Newline = showString " NL "
 
@@ -29,10 +29,10 @@ initialLexerState :: LexerState
 popToken :: LexerState -> LexerState
 pushToken :: LexerState -> Token -> LexerState
 completeLex :: LexerState -> [Token]
-lexStringFoldOperation :: Maybe Char -> LexerState -> Char -> LexerState
-lexStringIdentifyToken :: Maybe Char -> LexerState -> Char -> GeneralCategory -> LexerState
-lexString :: Maybe Char -> [Char] -> [Token]
-lexFile :: Maybe Char -> Handle -> IO [Token]
+lexStringFoldOperation :: Maybe String -> LexerState -> Char -> LexerState
+lexStringIdentifyToken :: Maybe String -> LexerState -> Char -> GeneralCategory -> LexerState
+lexString :: Maybe String -> [Char] -> [Token]
+lexFile :: Maybe String -> Handle -> IO [Token]
 lexFile delim handle =
   do
     hSetEncoding handle utf8
@@ -63,9 +63,13 @@ lexStringIdentifyToken Nothing state c _ =
     LexerState v (Just (Word s)) -> LexerState v $ Just $ Word $ s ++ [c]
     _ -> pushToken state $ Word [c]
 lexStringIdentifyToken (Just delim) state c typ =
-  case (c == delim, state) of
-    (True, LexerState v (Just Delimiter)) -> LexerState v $ Just Delimiter
-    (True, LexerState _ _) -> pushToken state $ Delimiter
+  case (c `elem` delim, state) of
+    (True, LexerState v (Just (Delimiter sc))) -> 
+      if c == sc then 
+        LexerState v $ Just (Delimiter sc) 
+      else
+        pushToken state $ Delimiter c
+    (True, LexerState _ _) -> pushToken state $ Delimiter c
     (False, _) -> lexStringIdentifyToken Nothing state c typ
 
 lexStringFoldOperation delim state c = lexStringIdentifyToken delim state c $ generalCategory c

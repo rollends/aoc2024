@@ -24,7 +24,7 @@ part1_accumulator (current : rest) accum =
 
 part2_accumulator [] _ accum = accum
 part2_accumulator ((Word []) : rest) b accum = part2_accumulator rest b accum
-part2_accumulator (Delimiter : rest) b accum = part2_accumulator rest b accum
+part2_accumulator ((Delimiter _) : rest) b accum = part2_accumulator rest b accum
 part2_accumulator (Newline : rest) b accum = part2_accumulator rest b accum
 part2_accumulator ((Whitespace _) : rest) b accum = part2_accumulator rest b accum
 part2_accumulator ((Word string) : rest) True accum =
